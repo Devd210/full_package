@@ -1,0 +1,5 @@
+*sublime-*
+*.svg
+*.xcf
+.idea/
+cmake-build-debug/

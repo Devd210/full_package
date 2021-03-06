@@ -1,0 +1,35 @@
+<library path="librecovery_plugins">
+
+  <class name="recovery/RotateRecovery" type="recovery::RotateRecovery" base_class_type="recovery::AbstractRecovery">
+    <description> Rotate recovery </description>
+  </class>
+
+  <class name="recovery/RotateRecoveryExecution" type="recovery::RotateRecoveryExecution" base_class_type="recovery::AbstractRecoveryExecution">
+    <description> Rotate recovery </description>
+  </class>
+
+  <class name="recovery/ClearCostmapRecovery" type="recovery::ClearCostmapRecovery" base_class_type="recovery::AbstractRecovery">
+    <description> Clear Costmap recovery </description>
+  </class>
+
+  <class name="recovery/ClearCostmapRecoveryExecution" type="recovery::ClearCostmapRecoveryExecution" base_class_type="recovery::AbstractRecoveryExecution">
+    <description> Clear Costmap recovery </description>
+  </class>
+
+  <class name="recovery/StepBackAndSteerTurnRecovery" type="recovery::StepBackAndSteerTurnRecovery" base_class_type="recovery::AbstractRecovery">
+    <description> Step Back And Steer Turn recovery </description>
+  </class>
+
+  <class name="recovery/StepBackAndSteerTurnRecoveryExecution" type="recovery::StepBackAndSteerTurnRecoveryExecution" base_class_type="recovery::AbstractRecoveryExecution">
+    <description> Step Back And Steer Turn recovery </description>
+  </class>
+
+  <class name="recovery/BackUpRecovery" type="recovery::BackUpRecovery" base_class_type="recovery::AbstractRecovery">
+    <description> Back Up recovery </description>
+  </class>
+
+  <class name="recovery/BackUpRecoveryExecution" type="recovery::BackUpRecoveryExecution" base_class_type="recovery::AbstractRecoveryExecution">
+    <description> Back Up recovery </description>
+  </class>
+
+</library>

@@ -1,0 +1,44 @@
+<launch>
+    <arg name="gp_debug" default="true"/>
+    <arg name="ctrl_debug" default="true" />
+    <arg name="gui" default="false"/>
+    <arg name="sim" default="false"/>
+    <arg name="respawn" default="false"/>
+      <arg name="world_name" default="mowito"/>
+  <arg name="world_map" default="mowito_map"/>
+
+      <include file="$(find rosbot_description)/launch/rosbot_rviz.launch">
+    <arg name="rviz_file" value="rosbot.rviz"/>
+  </include>
+
+  <arg name="map_file" default="$(find mw_mapping)/maps/mowito_map.yaml"/>
+    <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
+
+  <node pkg="stage_ros" type="stageros" name="stageros" args="$(find rosbot_gazebo)/worlds/mowito_map_fake.world" respawn="false" if="$(arg sim)">
+    <param name="base_watchdog_timeout" value="0.2"/>
+    <remap from="base_scan" to="scan"/>
+  </node>
+
+    <node name="fake_localization" pkg="fake_localization" type="fake_localization" respawn="false" />
+
+    <node pkg="timed_roslaunch" type="timed_roslaunch.sh" args="10 $(find costmap_2d)/launch/costmap.launch" name="costmap_launcher" output="screen"/>
+
+    <include file="$(find global_planner)/launch/global_planner.launch">
+        <arg name="debug" value="$(arg gp_debug)"/>
+        <arg name="respawn" value="$(arg respawn)"/>
+    </include>
+
+    <include file="$(find controller_executive)/launch/controller_executive.launch">
+        <arg name="respawn" value="$(arg respawn)"/>
+    </include>
+    
+    <node name="mission_executive" type="mission_executive_node" pkg="executive" output="screen">
+      <param name = "planner" value = "NavfnPlanner"/>
+      <param name="loop_frequency" value="20.0"/>
+      <param name="max_time_lag" value="0.5"/>
+      <param name="decay" value="0.9"/>
+      <param name="costmap_reset_timeout" value="5.0"/>
+      <param name="controller_reset_timeout" value="10.0"/>
+    </node>
+
+</launch>

@@ -1,0 +1,10 @@
+<library path="libmw_teb">
+    <class name="teb_local_planner/TebLocalPlannerROS" type="teb_local_planner::TebLocalPlannerROS" base_class_type="controller::AbstractController">
+        <description> Controller implementing the teb local planner</description>
+    </class>
+
+    <class name="teb_local_planner/TebLocalPlannerROSExecution" type="teb_local_planner::TebLocalPlannerROSExecution" base_class_type="controller::AbstractControllerExecution">
+        <description> Controller Executive for teb local planner </description>
+    </class>
+
+</library>

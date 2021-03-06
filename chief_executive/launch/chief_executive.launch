@@ -1,0 +1,35 @@
+<launch>
+
+  <arg name="gp_debug" default="true"/>
+  <arg name="ctrl_debug" default="true" />
+  <arg name="gui" default="false"/>
+  <arg name="sim" default="false"/>
+  <arg name="respawn" default="false"/>
+
+  <include file="$(find rosbot_description)/launch/rosbot_rviz_amcl.launch" if="$(arg sim)">
+    <arg name="gui" value="$(arg gui)"/>
+  </include>
+
+  <node pkg="timed_roslaunch" type="timed_roslaunch.sh" args="10 $(find costmap_2d)/launch/costmap.launch" name="costmap_launcher" output="screen"/>
+
+  <include file="$(find global_planner)/launch/global_planner.launch">
+    <arg name="debug" value="$(arg gp_debug)"/>
+    <arg name="respawn" value="$(arg respawn)"/>
+  </include>
+
+  <include file="$(find controller_executive)/launch/controller_executive.launch">
+    <arg name="debug" value="$(arg ctrl_debug)"/>
+    <arg name="respawn" value="$(arg respawn)"/>
+  </include>
+
+  <node name="mission_executive" type="mission_executive_node" pkg="executive" output="screen">
+    <param name = "planner" value = "NavfnPlanner"/>
+  </node>
+
+  <node name="chief_executive" pkg="chief_executive" type="chief_executive_node" output="screen"/>
+
+  <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch"></include>
+
+  <node pkg="roboview" type="file_handler_node.py" name="roboview_file_handler" />
+
+</launch>

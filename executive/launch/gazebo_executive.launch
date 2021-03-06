@@ -1,0 +1,23 @@
+<launch>
+	<arg name="planner" default="NavfnPlanner"/>
+  	<arg name="gp_debug" default="true"/>
+	<arg name="respawn" value="true"/>
+
+	<node name="chief_executive" pkg="chief_executive" type="chief_executive_node" output="screen"/>
+    <node pkg="task_executive" type= "task_executive_node" name="task_executive" output="screen"/>
+	
+	    <include file="$(find global_planner)/launch/global_planner.launch">
+        <arg name="debug" value="$(arg gp_debug)"/>
+        <arg name="respawn" value="$(arg respawn)"/>
+    </include>
+    
+    <node name="mission_executive" type="mission_executive_node" pkg="executive" output="screen">
+      <param name = "planner" value = "$(arg planner)"/>
+      <param name="loop_frequency" value="20.0"/>
+      <param name="max_time_lag" value="0.5"/>
+      <param name="decay" value="0.9"/>
+      <param name="costmap_reset_timeout" value="5.0"/>
+      <param name="controller_reset_timeout" value="10.0"/>
+    </node>
+
+</launch>

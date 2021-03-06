@@ -1,0 +1,15 @@
+#!/bin/sh
+
+if [ "$#" -ne 3 ]
+then
+  echo "Usage: usage-plot <.dat file> <name of process> <output .png file>"
+fi
+
+if dpkg -s gnuplot > /dev/null
+then
+    echo "gnuplot installed"
+else
+    sudo apt install gnuplot
+fi
+
+gnuplot --persist -c /bin/usage-plot.gp $1 $2 $3

@@ -1,0 +1,4 @@
+# Default value 0 returns the current task status
+uint32 id
+---
+int32 status

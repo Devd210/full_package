@@ -1,0 +1,1 @@
+uint8[] cost_grid

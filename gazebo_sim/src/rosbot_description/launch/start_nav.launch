@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="gp_debug" default="false"/>
+  <arg name="ctrl_debug" default="false"/>
+  <arg name="rcvr_debug" default="false"/>
+  <arg name="respawn" default="false"/>
+
+  <arg name="me_params" default="$(find executive)/config"/>
+  <!-- <arg name="ce_params" default="$(find controller_executive)/config"/> -->
+  <arg name="re_params" default="$(find recovery_executive)/config"/>
+  <arg name="gp_params" default="$(find global_planner)/config"/>
+
+  <node pkg="timed_roslaunch" type="timed_roslaunch.sh" args="10 $(find costmap_2d)/launch/costmap.launch"
+        name="costmap_launcher" output="screen"/>
+
+  <include file="$(find global_planner)/launch/global_planner.launch">
+    <arg name="debug" value="$(arg gp_debug)"/>
+    <arg name="respawn" value="$(arg respawn)"/>
+    <arg name="gp_params" value="$(arg gp_params)"/>
+  </include>
+
+  <include file="$(find controller_executive)/launch/controller_executive.launch">
+    <arg name="debug" value="$(arg ctrl_debug)"/>
+    <arg name="respawn" value="$(arg respawn)"/>
+    <!-- <arg name="ce_params" value="$(arg ce_params)"/> -->
+  </include>
+
+  <include file="$(find recovery_executive)/launch/recovery_executive.launch">
+    <arg name="debug" value="$(arg rcvr_debug)"/>
+    <arg name="respawn" value="$(arg respawn)"/>
+    <arg name="re_params" value="$(arg re_params)"/>
+  </include>
+
+  <node name="mission_executive" type="mission_executive_node" pkg="executive" output="screen">
+    <rosparam command="load" file="$(arg me_params)/mission_executive_params.yaml"/>
+  </node>
+
+</launch>

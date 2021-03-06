@@ -1,0 +1,25 @@
+<launch>
+    <arg name="map_name" default="meeting_room1"/>
+    <arg name="respawn" default="true"/>
+    <arg name="debug" default="false"/>
+    <arg name="scan_topic" default="/scan"/>
+
+    <!-- localization node-->
+    <include file="$(find mw_run)/launch/start_mwpfl.launch">
+        <arg name="map_name" value="$(arg map_name)"/>
+        <arg name="scan_topic" value="$(arg scan_topic)"/>        
+        <arg name="robot_init_x" value="0"/>
+        <arg name="robot_init_y" value="0"/>
+        <arg name="robot_init_phi" value="0"/>
+    </include>
+
+    <include file="$(find executive)/launch/demo_nav_server.launch">
+        <arg name="gp_debug" value="$(arg debug)"/>
+        <arg name="ctrl_debug" value="$(arg debug)"/>
+        <arg name="respawn" value="$(arg respawn)"/>
+        <arg name="max_retrials" value="50"/>
+        <arg name="local_costmap_timeout" value="10"/>
+        <arg name="state_machine_timeout" value="15"/>
+    </include>
+    
+</launch>

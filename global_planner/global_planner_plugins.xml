@@ -1,0 +1,11 @@
+<library path="lib/libglobal_planner">
+
+    <class name="global_planner/SimplePlanner" type="global_planner::SimplePlanner" base_class_type="global_planner::AbstractPlanner">
+        <description> This is the simple planner plugin. </description>
+    </class>
+
+    <class name="global_planner/SimplePlannerExecution" type="global_planner::SimplePlannerExecution" base_class_type="global_planner::AbstractPlannerExecution">
+        <description> This is the simple planner execution plugin. </description>
+    </class>
+
+</library>

@@ -1,0 +1,331 @@
+/**
+ *
+ * @file base_controller_execution.h
+ * @brief The base controller execution class. Every controller execution must inherit this class.
+ * @author Sarthak Mittal <sarthak.mittal@mowito.in>
+ *
+ */
+
+#ifndef CONTROLLER_EXECUTIVE_BASE_CONTROLLER_EXECUTION_H
+#define CONTROLLER_EXECUTIVE_BASE_CONTROLLER_EXECUTION_H
+
+#include <map>
+
+#include <string>
+#include <vector>
+#include <memory>
+
+#include <boost/thread.hpp>
+#include <boost/chrono/duration.hpp>
+#include <boost/chrono/thread_clock.hpp>
+
+#include <ros/ros.h>
+#include <ros/callback_queue.h>
+
+#include <tf/transform_listener.h>
+
+#include <geometry_msgs/PoseStamped.h>
+#include <geometry_msgs/TwistStamped.h>
+#include <nav_msgs/Odometry.h>
+
+#include <mw_core/types.h>
+#include <mw_core/utility_functions.h>
+#include <mw_core/abstract_classes/abstract_execution_base.h>
+
+#include "controller_executive/base_controller.h"
+
+namespace controller {
+
+/**
+ * @brief The AbstractControllerExecution class loads and binds the controller plugin. It contains a thread
+ *        running the plugin in a cycle to move the robot. An internal state is saved and will be pulled by
+ *        server, to monitor controller execution. Due to a state change it wakes up all threads connected
+ *        to the condition variable.
+ */
+class AbstractControllerExecution : public mw_core::AbstractExecution {
+
+ public:
+
+  static const double DEFAULT_CONTROLLER_FREQUENCY;
+
+  typedef boost::shared_ptr<AbstractControllerExecution> Ptr;
+
+  /**
+   * @brief Internal states
+   */
+  enum ControllerState {
+    INITIALIZED,  ///< Controller has been initialized successfully.
+    STARTED,      ///< Controller has been started.
+    PLANNING,     ///< Executing the plugin.
+    NO_PLAN,      ///< The controller has been started without a plan.
+    MAX_RETRIES,  ///< Exceeded the maximum number of retries without a valid command.
+    PAT_EXCEEDED, ///< Exceeded the patience time without a valid command.
+    EMPTY_PLAN,   ///< Received an empty plan.
+    INVALID_PLAN, ///< Received an invalid plan that the controller plugin rejected.
+    NO_LOCAL_CMD, ///< Received no velocity command by the plugin, in the current cycle.
+    GOT_LOCAL_CMD,///< Got a valid velocity command from the plugin.
+    ARRIVED_GOAL, ///< The robot arrived the goal.
+    CANCELED,     ///< The controller has been canceled.
+    STOPPED,      ///< The controller has been stopped!
+    INTERNAL_ERROR///< An internal error occurred.
+  };
+
+  /**
+   * @brief Constructor
+   * @param condition Thread sleep condition variable, to wake up connected threads
+   * @param controller_plugin_type The plugin type associated with the plugin to load
+   * @param tf_listener_ptr Shared pointer to a common tf listener
+   */
+  AbstractControllerExecution();
+
+  /**
+   * @brief Destructor
+   */
+  virtual ~AbstractControllerExecution();
+
+  virtual void initialize(const std::string &name,
+                          const controller::AbstractController::Ptr &controller_ptr,
+                          const TFPtr &tf_listener_ptr);
+
+  /**
+   * @brief Starts the controller, a valid plan should be given in advance.
+   * @return false if the thread is already running, true if starting the controller succeeded!
+   */
+  virtual bool start();
+
+  /**
+   * @brief Sets a new plan to the controller execution
+   * @param plan A vector of stamped poses.
+   */
+  void setNewPlan(const std::vector<geometry_msgs::PoseStamped> &plan);
+
+  /**
+   * @brief Cancel the planner execution. This calls the cancel method of the planner plugin. This could be useful if the
+   * computation takes too much time.
+   * @return true, if the planner plugin tries / tried to cancel the planning step.
+   */
+  virtual bool cancel();
+
+  virtual void postRun();
+
+  /**
+   * @brief Return the current state of the controller execution. Thread communication safe.
+   * @return current state, enum value of ControllerState
+   */
+  ControllerState getState();
+
+  /**
+   * @brief Returns the time of the last plugin call
+   * @return Time of the last plugin call
+   */
+  ros::Time getLastPluginCallTime();
+
+  /**
+   * @brief Returns the last velocity command calculated by the plugin. Set by setVelocityCmd method.
+   * Note that it doesn't need to be a valid command sent to the robot, as we report also failed calls
+   * to the plugin on controller action feedback.
+   * @return The last valid velocity command.
+   */
+  geometry_msgs::TwistStamped getVelocityCmd();
+
+  /**
+   * @brief Checks whether the patience duration time has been exceeded, ot not
+   * @return true, if the patience has been exceeded.
+   */
+  bool isPatienceExceeded();
+
+  /**
+   * @brief Sets the controller frequency
+   * @param frequency The controller frequency
+   * @return true, if the controller frequency has been changed / set succesfully, false otherwise
+   */
+  bool setControllerFrequency(double frequency);
+
+  /**
+   * @brief Returns whether the robot should normally move or not. True if the controller seems to work properly.
+   * @return true, if the robot should normally move, false otherwise
+   */
+  bool isMoving();
+
+  bool reset();
+
+ protected:
+
+  /**
+   * @brief Request plugin for a new velocity command, given the current position, orientation, and velocity of the
+   * robot. We use this virtual method to give concrete implementations as move_base the chance to override it and do
+   * additional stuff, for example locking the costmap.
+   * @param pose the current pose of the robot.
+   * @param velocity the current velocity of the robot.
+   * @param cmd_vel Will be filled with the velocity command to be passed to the robot base.
+   * @param message Optional more detailed outcome as a string.
+   * @return Result code as described on ExePath action result and plugin's header.
+   */
+  virtual unsigned int computeVelocityCmd(const geometry_msgs::PoseStamped &pose,
+                                          const geometry_msgs::TwistStamped &velocity,
+                                          geometry_msgs::TwistStamped &vel_cmd, std::string &message);
+
+  /**
+   * @brief Sets the velocity command, to make it available for another thread
+   * @param vel_cmd_stamped current velocity command
+   */
+  void setVelocityCmd(const geometry_msgs::TwistStamped &vel_cmd_stamped);
+
+  //! the name of the loaded plugin
+  std::string plugin_name_;
+
+  //! the local planer to calculate the velocity command
+  controller::AbstractController::Ptr controller_;
+
+  //! shared pointer to the shared tf listener
+  TFPtr tf_listener_ptr_;
+
+  //! The current cycle start time of the last cycle run. Will by updated each cycle.
+  ros::Time last_call_time_;
+
+  //! The time the controller has been started.
+  ros::Time start_time_;
+
+  //! The maximum number of retries
+  int max_retries_;
+
+  //! The time / duration of patience, before changing the state.
+  ros::Duration patience_;
+
+  /**
+   * @brief The main run method, a thread will execute this method. It contains the main controller execution loop.
+   */
+  virtual void run();
+
+  /**
+   * @brief Check if its safe to drive.
+   * This method gets called at every controller cycle, stopping the robot if its not. When overridden by
+   * child class, gives a chance to the specific execution implementation to stop the robot if it detects
+   * something wrong on the underlying map.
+   * @return Always true, unless overridden by child class.
+   */
+  virtual bool safetyCheck() { return true; };
+
+ private:
+
+  /**
+   * @brief Sets a velocity command with zero values to stop the robot.
+   */
+  void setZeroVelocity(geometry_msgs::TwistStamped &cmd_vel_stamped);
+
+  /**
+   * @brief Checks whether the goal has been reached in the range of tolerance or not
+   * @return true if the goal has been reached, false otherwise
+   */
+  bool reachedGoalCheck();
+
+  /**
+   * @brief Computes the robot pose;
+   * @return true if the robot pose has been computed successfully, false otherwise.
+   */
+  bool computeRobotPose();
+
+  /**
+   * @brief Sets the controller state. This method makes the communication of the state thread safe.
+   * @param state The current controller state.
+   */
+  void setState(ControllerState state);
+
+  /**
+   * @brief Callback for odometry subscriber
+   * @param nav_msgs::Odometry msg
+   */
+  void odometryCallback(const nav_msgs::Odometry::ConstPtr &msg);
+
+  //! mutex to handle safe thread communication for the current value of the state
+  boost::mutex state_mtx_;
+
+  //! mutex to handle safe thread communication for the current plan
+  boost::mutex plan_mtx_;
+
+  //! mutex to handle safe thread communication for the current velocity command
+  boost::mutex vel_cmd_mtx_;
+
+  //! mutex to handle safe thread communication for the last plugin call time
+  boost::mutex lct_mtx_;
+
+  //! true, if a new plan is available. See hasNewPlan()!
+  bool new_plan_;
+
+  /**
+   * @brief Returns true if a new plan is available, false otherwise! A new plan is set by another thread!
+   * @return true, if a new plan has been set, false otherwise.
+   */
+  bool hasNewPlan();
+
+  /**
+   * @brief Gets the new available plan. This method is thread safe.
+   * @return The plan
+   */
+  std::vector<geometry_msgs::PoseStamped> getNewPlan();
+
+  //! callback queue
+  ros::CallbackQueue callback_queue_;
+
+  //! the last calculated velocity command
+  geometry_msgs::TwistStamped vel_cmd_stamped_;
+
+  //! the last set plan which is currently processed by the controller
+  std::vector<geometry_msgs::PoseStamped> plan_;
+
+  //! the duration which corresponds with the controller frequency.
+  boost::chrono::microseconds calling_duration_;
+
+  //! the frame of the robot, which will be used to determine its position.
+  std::string robot_frame_;
+
+  //! the global frame the robot is controlling in.
+  std::string global_frame_;
+
+  //! publisher for the current velocity command
+  ros::Publisher vel_pub_;
+
+  //! publisher for the current goal
+  ros::Publisher current_goal_pub_;
+
+  //! subscriber for robot odometry
+  ros::Subscriber odom_sub_;
+
+  //! odometry topic
+  std::string odom_topic_;
+
+  //! the current controller state
+  AbstractControllerExecution::ControllerState state_;
+
+  //! time before a timeout used for tf requests
+  double tf_timeout_;
+
+  //! dynamic reconfigure config mutex, thread safe param reading and writing
+  boost::mutex configuration_mutex_;
+
+  //! main controller loop variable, true if the controller is running, false otherwise
+  bool moving_;
+
+  //! whether to check for the goal tolerance or not.
+  bool tolerance_check_;
+
+  //! whether to force the robot to stop once the goal is reached.
+  bool force_stop_at_goal_;
+
+  //! distance tolerance to the given goal pose
+  double dist_tolerance_;
+
+  //! angle tolerance to the given goal pose
+  double angle_tolerance_;
+
+  //! current robot pose;
+  geometry_msgs::PoseStamped robot_pose_;
+
+  //! current robot velocity
+  geometry_msgs::TwistStamped robot_velocity_;
+
+};
+
+} /* namespace controller */
+
+#endif //CONTROLLER_EXECUTIVE_BASE_CONTROLLER_EXECUTION_H

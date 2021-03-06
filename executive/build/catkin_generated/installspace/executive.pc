@@ -1,0 +1,8 @@
+prefix=/usr/local
+
+Name: executive
+Description: Description of executive
+Version: 0.0.0
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib -lexecutive
+Requires: std_msgs geometry_msgs std_srvs xmlrpcpp

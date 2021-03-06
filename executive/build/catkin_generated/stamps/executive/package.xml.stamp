@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>executive</name>
+  <version>0.0.0</version>
+  <description>The executive package</description>
+
+  <maintainer email="anirudhyadav1001@gmail.com">Anirudh Yadav</maintainer>
+
+  <license>TODO</license>
+
+
+  <depend>roscpp</depend>
+  <build_depend>message_generation</build_depend>
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_export_depend>std_msgs</build_export_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <build_depend>std_srvs</build_depend>
+  <build_export_depend>std_srvs</build_export_depend>
+  <exec_depend>std_srvs</exec_depend>
+  <build_depend>geometry_msgs</build_depend>
+  <build_export_depend>geometry_msgs</build_export_depend>
+  <exec_depend>geometry_msgs</exec_depend>
+  <build_depend>mw_msgs</build_depend>
+  <build_export_depend>mw_msgs</build_export_depend>
+  <build_depend>diagnostic</build_depend>
+  <build_export_depend>diagnostic</build_export_depend>
+  <exec_depend>diagnostic</exec_depend>
+  <build_depend>mlicense</build_depend>
+  <build_export_depend>mlicense</build_export_depend>
+  <exec_depend>mlicense</exec_depend>
+  <depend>xmlrpcpp</depend>
+  <depend>mw_core</depend>
+
+  <!-- The export tag contains other, unspecified, tags -->
+  <export>
+    <!-- Other tools can request additional information be placed here -->
+
+  </export>
+</package>

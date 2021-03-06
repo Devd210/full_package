@@ -1,0 +1,6 @@
+<launch>
+  <param name="script_location" type="str" value="$(find mw_tools)/scripts" />
+    
+  <node name="start_usage_mon" type="start_usage_mon.py" pkg="mw_tools" output="screen">
+  </node>
+</launch>

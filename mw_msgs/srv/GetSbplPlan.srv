@@ -1,0 +1,5 @@
+# Array of waypoints
+geometry_msgs/PoseArray waypoints
+---
+# The plan
+geometry_msgs/PoseArray plan

@@ -1,0 +1,9 @@
+<library path="lib/libmw_navfn_planner">
+	<class name="navfn_planner/NavfnPlanner" type="navfn_planner::NavfnPlanner" base_class_type="global_planner::AbstractPlanner">
+	  <description>Navfn Planner from navigation2</description>
+	</class>
+
+	<class name="navfn_planner/NavfnPlannerExecution" type="navfn_planner::NavfnPlannerExecution" base_class_type="global_planner::AbstractPlannerExecution">
+		<description>The navfn planner execution plugin</description>
+	</class>
+</library>

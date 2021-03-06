@@ -1,0 +1,26 @@
+mw_msgs:
+  ubuntu: [ros-melodic-mw-msgs]
+
+diagnostic:
+  ubuntu: [ros-melodic-diagnostic]
+
+mlicense:
+  ubuntu: [ros-melodic-mlicense]
+
+mw_core:
+  ubuntu: [ros-melodic-mw-core]
+
+costmap_2d:
+  ubuntu: [ros-melodic-costmap-2d]
+
+executive:
+  ubuntu: [ros-melodic-executive]
+
+controller_executive:
+  ubuntu: [ros-melodic-controller-executive]
+
+rosbot_gazebo:
+  ubuntu: [ros-melodic-rosbot-gazebo]
+
+rosbot_description:
+  ubuntu: [ros-melodic-rosbot-description]

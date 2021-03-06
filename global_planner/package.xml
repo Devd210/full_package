@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format2.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="2">
+  <name>global_planner</name>
+  <version>1.0.0</version>
+  <description>
+    The global_planner package.This package provides planner interfaces and plugins.
+  </description>
+  <maintainer email="sourav.agrawal@mowito.in">Sourav Agrawal</maintainer>
+
+  <license>Proprietary</license>
+  <author email="sourav.agrawal@mowito.in">Sourav Agrawal</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>dynamic_reconfigure</depend>
+  <depend>geometry_msgs</depend>
+  <depend>std_msgs</depend>
+  <depend>tf</depend>
+  <depend>mw_core</depend>
+  <depend>pluginlib</depend>
+  <depend>mw_msgs</depend>
+  <depend>message_generation</depend>
+  <depend>roscpp</depend>
+  <depend>tf2_ros</depend>
+  <depend>costmap_2d</depend>
+  <depend>nav_msgs</depend>
+
+  <export>
+    <global_planner plugin="${prefix}/global_planner_plugins.xml" />
+  </export>
+
+</package>

@@ -1,0 +1,3 @@
+mw_msgs/Route route
+---
+geometry_msgs/PoseArray plan

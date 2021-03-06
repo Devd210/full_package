@@ -1,0 +1,5 @@
+# Default value 0 returns the current route status
+uint32 id
+bool pause_state
+---
+uint8 status

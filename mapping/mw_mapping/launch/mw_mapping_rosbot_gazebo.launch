@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<launch>
+  <master auto="start"/>
+
+
+  <arg name="scan_topic" default="/scan" /> 
+  <arg name="laser_frame" default="laser" />
+  <!-- <arg name="laser_frame" default="base_laser_link" /> -->
+  <arg name="odom_frame" default="odom" />
+  <arg name="base_frame" default="base_link" />
+  <arg name="map_frame" default="map" />
+
+  <param name="/use_sim_time" value="true"/>
+  <!--- Run mw_mapping -->
+    <node pkg="utils" type="msg_to_tf" name="msg_to_tf">
+        <param name="odometry_topic" value="/odom"/>
+        <!--param name="pose_topic" value="pose"/-->
+        <!-- <param name="child_frame_id" value="base_link"/> -->
+    </node>
+
+
+<node pkg="mw_mapping" type="mw_mapping" name="mw_mapping" output="screen">
+    <param name="odom_frame" value="$(arg odom_frame)" />
+    <param name="base_frame" value="$(arg base_frame)" />
+    <param name="map_frame" value="$(arg map_frame)" />    
+    <param name="maxRange" value="5"/>
+    <param name="confidence_score" value="0.0"/>
+    <param name="resolution" value="0.1"/>
+    <remap from="scan" to="$(arg scan_topic)"/>
+</node>
+
+
+</launch>

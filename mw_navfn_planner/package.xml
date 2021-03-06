@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format2.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="2">
+  <name>mw_navfn_planner</name>
+  <version>1.0.0</version>
+  <description>
+    The navfn planner plugin from navigation2.
+  </description>
+  <maintainer email="sarthak.mittal@mowito.in">Sarthak Mittal</maintainer>
+
+  <license>Proprietary</license>
+  <author email="sarthak.mittal@mowito.in">Sarthak Mittal</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>roscpp</depend>
+  <depend>std_msgs</depend>
+  <depend>visualization_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>nav_msgs</depend>
+  <depend>mw_msgs</depend>
+  <depend>mw_core</depend>
+  <depend>tf2_ros</depend>
+  <depend>costmap_2d</depend>
+  <depend>global_planner</depend>
+  <depend>pluginlib</depend>
+
+  <export>
+    <global_planner plugin="${prefix}/global_planner_plugin.xml" />
+  </export>
+</package>

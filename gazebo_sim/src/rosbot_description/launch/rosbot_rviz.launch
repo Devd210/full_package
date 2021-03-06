@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<launch>
+	<arg name="rviz_file" default="rosbot.rviz"/>
+	<include file="$(find rosbot_description)/launch/rosbot_gazebo.launch" />
+
+	<param name="robot_description" command="$(find xacro)/xacro.py '$(find rosbot_description)/urdf/rosbot.xacro'"/>
+
+	<!-- Show in Rviz   -->
+	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find rosbot_description)/rviz/$(arg rviz_file)" output="screen"/>
+
+</launch>

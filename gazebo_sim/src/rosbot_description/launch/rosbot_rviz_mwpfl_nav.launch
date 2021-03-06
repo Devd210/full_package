@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<launch>
+
+    <arg name="world_name" default="mowito"/>
+    <arg name="world_map" default="mowito_map"/>
+    <arg name="gui" default="true"/>
+    <arg name="debug" default="false"/>
+    <arg name="respawn" default="false"/>
+
+    <!-- folder of params file for each module-->
+    <arg name="me_params" default="$(find executive)/config"/>
+    <arg name="ce_params" default="$(find controller_executive)/config"/>
+    <arg name="re_params" default="$(find recovery_executive)/config"/>
+    <arg name="gp_params" default="$(find global_planner)/config"/>
+
+    <!-- rosbot and the rviz-->
+    <include file="$(find rosbot_description)/launch/rosbot_rviz.launch">
+        <arg name="rviz_file" value="rosbot.rviz"/>
+    </include>
+    <!-- the world -->
+    <include file="$(find rosbot_gazebo)/launch/rosbot_world.launch">
+        <arg name="world" value="$(find rosbot_gazebo)/worlds/$(arg world_name).world"/>
+        <arg name="gui" value="$(arg gui)"/>
+    </include>
+
+    <!-- localization node-->
+    <include file="$(find mwpfl)/launch/gazebo_mwpfl.launch">
+        <arg name="map_file" value="$(find mw_mapping)/maps/$(arg world_map).yaml"/>
+    </include>
+
+    <!-- navigation stack -->
+    <include file="$(find rosbot_description)/launch/start_nav.launch">
+        <arg name="gp_debug" value="$(arg debug)"/>
+        <arg name="ctrl_debug" value="$(arg debug)"/>
+        <arg name="respawn" value="$(arg respawn)"/>
+        
+        <arg name="re_params" value="$(arg re_params)"/>
+        <arg name="ce_params" value="$(arg ce_params)"/>
+        <arg name="gp_params" value="$(arg gp_params)"/>
+        <arg name="me_params" value="$(arg me_params)"/>
+
+    </include>
+
+
+
+</launch>

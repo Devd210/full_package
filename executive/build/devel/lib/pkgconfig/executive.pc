@@ -1,0 +1,8 @@
+prefix=/home/devd/mowito_ws/src/executive/build/devel
+
+Name: executive
+Description: Description of executive
+Version: 0.0.0
+Cflags: -I/home/devd/mowito_ws/src/executive/include
+Libs: -L${prefix}/lib -lexecutive
+Requires: std_msgs geometry_msgs std_srvs xmlrpcpp

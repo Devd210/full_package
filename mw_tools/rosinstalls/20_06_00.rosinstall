@@ -1,0 +1,89 @@
+- git:
+    local-name: src/executive
+    uri: git@gitlab.com:mowito_dev/executive.git
+    version: 20.06.00
+- git:
+    local-name: src/chief_executive
+    uri: git@gitlab.com:mowito_dev/chief_executive.git
+    version: 20.06.00
+- git:
+    local-name: src/controller
+    uri: git@gitlab.com:mowito_dev/controller.git
+    version: 20.06.00
+- git:
+    local-name: src/costmap2d
+    uri: git@gitlab.com:mowito_dev/costmap2d.git
+    version: 20.06.00
+- git:
+    local-name: src/global_planner
+    uri: git@gitlab.com:mowito_dev/global_planner.git
+    version: 20.06.00
+- git:
+    local-name: src/local_diagnostic
+    uri: git@gitlab.com:mowito_dev/local_diagnostic.git
+    version: 20.06.00
+- git:
+    local-name: src/localization
+    uri: git@gitlab.com:mowito_dev/localization.git
+    version: 20.06.00
+- git:
+    local-name: src/mw_msgs
+    uri: git@gitlab.com:mowito_dev/mw_msgs.git
+    version: 20.06.00
+- git:
+    local-name: src/task_executive
+    uri: git@gitlab.com:mowito_dev/task_executive.git
+    version: 20.06.00
+- git:
+    local-name: src/utils
+    uri: git@gitlab.com:mowito_release/utils.git
+    version: 20.06.00
+- git:
+    local-name: src/mw_tools
+    uri: git@gitlab.com:mowito_dev/mw_tools.git
+    version: master
+- git:
+    local-name: src/mw_core
+    uri: git@gitlab.com:mowito_dev/mw_core.git
+    version: 20.06.00
+#- git:
+#    local-name: src/mw_sbpl
+#    uri: git@gitlab.com:mowito_dev/mw_sbpl.git
+#    version: master
+- git:
+    local-name: src/mw_run
+    uri: git@gitlab.com:mowito_dev/mw_run.git
+    version: 20.06.00
+- git:
+    local-name: src/recovery_executive
+    uri: git@gitlab.com:mowito_dev/recovery_executive.git
+    version: 20.06.00
+- git:
+    local-name: src/rosbot_ekf
+    uri: git@gitlab.com:mowito_dev/rosbot_ekf.git
+    version: 20.06.00
+- git:
+    local-name: src/mlicense
+    uri: git@gitlab.com:mowito_dev/mlicense.git
+    version: 20.06.00
+- git:
+    local-name: src/timed_roslaunch
+    uri: git@gitlab.com:mowito_dev/timed_roslaunch.git
+    version: 20.06.00
+
+- git:
+    local-name: src/gazebo_sim
+    uri: git@gitlab.com:mowito_dev/gazebo_sim.git
+    version: master
+- git:
+    local-name: src/mapping
+    uri: git@gitlab.com:mowito_dev/mapping.git
+    version: 20.06.00
+- git:
+    local-name: src/map_exploration
+    uri: git@gitlab.com:mowito_dev/map_exploration.git
+    version: 20.06.00
+- git:
+    local-name: src/mw_navfn_planner
+    uri: git@gitlab.com:mowito_dev/mw_navfn_planner.git
+    version: 20.06.00

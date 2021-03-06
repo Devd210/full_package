@@ -1,0 +1,19 @@
+<library path="libcontroller_plugins">
+
+    <class name="controller/PurePursuitController" type="controller::PurePursuitController" base_class_type="controller::AbstractController">
+        <description> Controller implementing Pure Pursuit path tracking algorithm </description>
+    </class>
+
+    <class name="controller/PurePursuitControllerExecution" type="controller::PurePursuitControllerExecution" base_class_type="controller::AbstractControllerExecution">
+        <description> Controller Executive for Pure Pursuit Controller </description>
+    </class>
+
+    <class name="trajectory_planner/TrajectoryPlannerROS" type="trajectory_planner::TrajectoryPlannerROS" base_class_type="controller::AbstractController">
+        <description> Controller implementing the base local planner from move_base</description>
+    </class>
+
+    <class name="trajectory_planner/TrajectoryPlannerROSExecution" type="trajectory_planner::TrajectoryPlannerROSExecution" base_class_type="controller::AbstractControllerExecution">
+        <description> Controller Executive for base local planner from move_base </description>
+    </class>
+
+</library>

@@ -1,0 +1,30 @@
+<launch>
+    <arg name="gp_debug" default="true"/>
+    <arg name="ctrl_debug" default="true" />
+    <arg name="gui" default="false"/>
+    <arg name="sim" default="false"/>
+    <arg name="planner" default="NavfnPlanner"/>
+    <arg name="run_controller" default="false" />
+    <arg name="respawn" default="true"/>
+
+    <include file="$(find rosbot_description)/launch/rosbot_rviz_amcl.launch" if="$(arg sim)">
+        <arg name="gui" value="$(arg gui)"/>
+    </include>
+
+    <node pkg="timed_roslaunch" type="timed_roslaunch.sh" args="10 $(find costmap_2d)/launch/costmap.launch" name="costmap_launcher" output="screen"/>
+
+    <include file="$(find global_planner)/launch/global_planner.launch">
+        <arg name="debug" value="$(arg gp_debug)"/>
+        <arg name="respawn" value="$(arg respawn)"/>
+    </include>
+
+    <include file="$(find controller_executive)/launch/controller_executive.launch">
+        <arg name="respawn" value="$(arg respawn)"/>
+    </include>
+
+    <node name="costmap_plan_test" type="costmap_plan_test" pkg="executive" output="screen">
+        <param name = "planner" value = "$(arg planner)"/>
+        <param name = "run_controller" value= "$(arg run_controller)"/>
+    </node>
+
+</launch>

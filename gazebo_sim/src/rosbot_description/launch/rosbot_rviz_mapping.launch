@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<launch>
+
+  <arg name="scan_topic" default="/scan" /> 
+  <arg name="laser_frame" default="laser" />
+  <arg name="odom_frame" default="odom" />
+  <arg name="base_frame" default="base_link" />
+  <arg name="map_frame" default="map" />
+
+  <arg name="world_name" default="mowito"/>
+  <arg name="gui" default="false"/>
+
+  <node pkg="utils" type="msg_to_tf" name="msg_to_tf">
+      <param name="odometry_topic" value="/odom"/>
+    <!--<param name="pose_topic" value="pose"/>-->
+    <!-- <param name="child_frame_id" value="base_link"/> -->
+  </node>
+
+  <!-- rosbot and the rviz-->
+  <include file="$(find rosbot_description)/launch/rosbot_rviz.launch">
+      <arg name="rviz_file" value="rosbot.rviz"/>
+  </include>
+  <!-- the world -->
+  <include file="$(find rosbot_gazebo)/launch/rosbot_world.launch">
+      <arg name="world" value="$(find rosbot_gazebo)/worlds/$(arg world_name).world"/>
+      <arg name="gui" value="$(arg gui)"/>
+  </include>
+
+  <include file="$(find mw_run)/launch/start_mw_mapping.launch">
+      <arg name="scan_topic" value="$(arg scan_topic)" /> 
+      <arg name="laser_frame" value="$(arg laser_frame)" />
+      <arg name="odom_frame" value="$(arg odom_frame)" />
+      <arg name="base_frame" value="$(arg base_frame)" />
+      <arg name="map_frame" value="$(arg map_frame)" />
+  </include>
+
+</launch>

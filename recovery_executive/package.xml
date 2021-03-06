@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+
+<package format="2">
+  <name>recovery_executive</name>
+  <version>1.1.0</version>
+
+  <description>
+    Recovery Executive package to handle recoveries
+  </description>
+
+  <maintainer email="sarthak.mittal@mowito.in">Sarthak MIttal</maintainer>
+  <license>Proprietary</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>roscpp</depend>
+  <depend>geometry_msgs</depend>
+  <depend>nav_msgs</depend>
+  <depend>mw_core</depend>
+  <depend>mw_msgs</depend>
+  <depend>costmap_2d</depend>
+  <depend>controller_executive</depend>
+  <depend>dynamic_reconfigure</depend>
+  <depend>pluginlib</depend>
+
+  <export>
+    <recovery_executive plugin="${prefix}/recovery_plugins.xml" />
+  </export>
+</package>

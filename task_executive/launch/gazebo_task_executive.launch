@@ -1,0 +1,5 @@
+<launch>
+
+	<node name="task_executive" pkg="task_executive_node" type="task_executive_node" output="screen"/>
+	</node>
+</launch>
